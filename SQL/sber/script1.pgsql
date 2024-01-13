@@ -18,7 +18,7 @@ with
                 '1 day'
             ) as dt
     ),
-    table_cnt as (
+    table_reg_cnt as (
         select
             date (date_joined) as dt,
             count(*) as cnt
@@ -31,13 +31,13 @@ with
         order by
             dt
     ),
-    calendar_join as (
+    calendar_join_reg_cnt as (
         select
             calendar.dt,
-            coalesce(table_cnt.cnt, 0) as cnt
+            coalesce(table_reg_cnt.cnt, 0) as cnt
         from
             calendar
-            left join table_cnt on calendar.dt = table_cnt.dt
+            left join table_reg_cnt on calendar.dt = table_reg_cnt.dt
     ),
     table_max_cnt as (
         select
@@ -49,7 +49,7 @@ with
                     and current row
             ) as max_cnt
         from
-            calendar_join
+            calendar_join_reg_cnt
     )
 select
     *,
